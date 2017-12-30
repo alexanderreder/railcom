@@ -1,0 +1,79 @@
+@startuml
+namespace at.reder.datamodel {
+    interface Entity {
+        getId() : int        
+        getName() : String
+        setName(name : String)
+        getDescription() : String
+        setDescription(description : String)
+    }
+
+    interface RailwayEntity {
+        getWheelTrack() : int
+        setWheelTrack(wheelTrack : int)
+        getRailwayAgency() : String
+        setRailwayAgency(railwayAgency : String)
+        getMass() : int
+        setMass(mass : int)
+    }
+
+    Entity <-- RailwayEntity
+
+    interface DigitalFunction {
+    }
+
+    interface DigitalEntity {
+        getDigitalId() : int
+        setDigitalId(digitalId : int)
+        getDigitalFunctions() : Map<int, DigitalFunction>
+        setDigitalFunction(functionId : int, function : DigitalFunction)
+    }
+
+    Entity <-- DigitalEntity
+
+    enum OperatingMode {
+        STEAM, DIESEL, ELECTRIC
+    }
+    interface Locomotive {
+        getWheelArrangement() : String
+        setWheelArrangement(wheelArrangement : String)
+        getOperatingMode() : OperatingMode
+        setOperatingMode(operatingMode : OperatingMode)
+    }
+
+    OperatingMode "1" --* "1" Locomotive
+
+    RailwayEntity <-- Locomotive
+    
+
+    interface DigitalLocomotive {
+
+    }
+
+    DigitalEntity <-- DigitalLocomotive
+    Locomotive <-- DigitalLocomotive
+
+    interface Wagon {
+        getAxisCount() : int
+        setAxisCount(axisCount : int)
+    }
+
+
+
+    RailwayEntity <-- Wagon
+
+    interface DigitalWagon {
+    }
+
+    DigitalEntity <-- DigitalWagon
+    Wagon <-- DigitalWagon
+
+    interface Train {
+        getTrain() : List<RailwayEntity>
+        addEntity(pos : int, entity : RailwayEntity)
+    }
+
+    Train "1" *-- "*" RailwayEntity
+
+}
+@enduml
