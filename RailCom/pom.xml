@@ -47,11 +47,11 @@
                         <target>1.7</target>
                     </configuration>
                 </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -60,6 +60,7 @@
         <module>branding</module>
         <module>application</module>
         <module>DataModel</module>
+        <module>DataModelDigital</module>
     </modules>
 
     <properties>

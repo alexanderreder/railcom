@@ -1,12 +1,17 @@
 @startuml
-namespace at.reder.datamodel {
+namespace at.reder.railcom.datamodel {
     interface Entity {
-        getId() : int        
+        getId() : int
         getName() : String
         setName(name : String)
         getDescription() : String
         setDescription(description : String)
     }
+
+
+}
+
+namespace at.reder.railcom.datamodel.rail {
 
     interface RailwayEntity {
         getWheelTrack() : int
@@ -17,41 +22,30 @@ namespace at.reder.datamodel {
         setMass(mass : int)
     }
 
-    Entity <-- RailwayEntity
+    at.reder.railcom.datamodel.Entity <-- RailwayEntity
 
-    interface DigitalFunction {
-    }
-
-    interface DigitalEntity {
-        getDigitalId() : int
-        setDigitalId(digitalId : int)
-        getDigitalFunctions() : Map<int, DigitalFunction>
-        setDigitalFunction(functionId : int, function : DigitalFunction)
-    }
-
-    Entity <-- DigitalEntity
-
-    enum OperatingMode {
-        STEAM, DIESEL, ELECTRIC
-    }
     interface Locomotive {
         getWheelArrangement() : String
         setWheelArrangement(wheelArrangement : String)
-        getOperatingMode() : OperatingMode
         setOperatingMode(operatingMode : OperatingMode)
     }
 
-    OperatingMode "1" --* "1" Locomotive
-
     RailwayEntity <-- Locomotive
-    
 
-    interface DigitalLocomotive {
-
+    interface SteamLocomotive {
     }
 
-    DigitalEntity <-- DigitalLocomotive
-    Locomotive <-- DigitalLocomotive
+    Locomotive <-- SteamLocomotive
+
+    interface DieselLocomotive {
+    }
+
+    Locomotive <-- DieselLocomotive
+
+    interface ElectricLocomotive {
+    }
+
+    Locomotive <-- ElectricLocomotive
 
     interface Wagon {
         getAxisCount() : int
@@ -59,14 +53,8 @@ namespace at.reder.datamodel {
     }
 
 
-
     RailwayEntity <-- Wagon
 
-    interface DigitalWagon {
-    }
-
-    DigitalEntity <-- DigitalWagon
-    Wagon <-- DigitalWagon
 
     interface Train {
         getTrain() : List<RailwayEntity>
@@ -75,5 +63,45 @@ namespace at.reder.datamodel {
 
     Train "1" *-- "*" RailwayEntity
 
+}
+
+namespace at.reder.railcom.datamodel.track {
+
+    interface Signal {
+    }
+
+    at.reder.railcom.datamodel.Entity <-- Signal
+
+    interface Turnout {
+    }
+
+    at.reder.railcom.datamodel.Entity <-- Turnout
+
+    interface Platform {
+    }
+
+    at.reder.railcom.datamodel.Entity <-- Platform
+
+    interface BlockPost {
+    }
+
+    at.reder.railcom.datamodel.Entity <-- BlockPost
+}
+
+namespace at.reder.railcom.datamodel.street {
+
+    interface StreetEntity {
+    }
+
+    at.reder.railcom.datamodel.Entity <-- StreetEntity
+
+}
+
+namespace at.reder.railcom.datamodel.building {
+
+    interface HouseEntity {
+    }
+
+    at.reder.railcom.datamodel.Entity <-- HouseEntity
 }
 @enduml

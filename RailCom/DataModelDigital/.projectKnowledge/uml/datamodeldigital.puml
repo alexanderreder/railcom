@@ -1,0 +1,39 @@
+@startuml
+
+!include ../../../DataModel/.projectKnowledge/uml/datamodel.puml
+
+namespace at.reder.railcom.datamodel.digital {
+
+    interface DigitalFunction {
+    }
+
+    interface DigitalEntity {
+        getDigitalId() : int
+        setDigitalId(digitalId : int)
+        getDigitalFunctions() : Map<int, DigitalFunction>
+        setDigitalFunction(functionId : int, function : DigitalFunction)
+    }
+
+    at.reder.railcom.datamodel.Entity <-- DigitalEntity
+
+    DigitalEntity *.. "*" DigitalFunction
+}
+
+namespace at.reder.railcom.datamodel.rail.digital {
+
+    interface DigitalLocomotive {
+
+    }
+
+    at.reder.railcom.datamodel.digital.DigitalEntity <-- DigitalLocomotive
+    at.reder.railcom.datamodel.rail.Locomotive <-- DigitalLocomotive
+
+    interface DigitalWagon {
+    }
+
+    at.reder.railcom.datamodel.digital.DigitalEntity <-- DigitalWagon
+    at.reder.railcom.datamodel.rail.Wagon <-- DigitalWagon
+
+}
+
+@enduml

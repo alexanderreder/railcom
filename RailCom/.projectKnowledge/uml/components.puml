@@ -1,0 +1,23 @@
+@startuml
+
+[RailComApp] as rca
+[RailComBranding] as rcb
+[DataModel] as dm
+[DataModelDigital] as dmd
+[Service] as service
+[Running] as running
+
+interface jpa
+
+rca -- rcb
+rca -- dm
+dm -- dmd
+rca -- service
+rca -- running
+
+dm .. "use" jpa
+dmd .. "use" jpa
+service .. dm
+service .. dmd
+running .. dmd
+@enduml
