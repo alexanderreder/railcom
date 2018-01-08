@@ -14,7 +14,7 @@ namespace at.reder.railcom.datamodel.digital {
         setDigitalFunction(functionId : int, function : DigitalFunction)
     }
 
-    at.reder.railcom.datamodel.Entity <-- DigitalEntity
+    at.reder.railcom.datamodel.ModelEntity <|-- DigitalEntity
 
     DigitalEntity *.. "*" DigitalFunction
 }
@@ -25,14 +25,14 @@ namespace at.reder.railcom.datamodel.rail.digital {
 
     }
 
-    at.reder.railcom.datamodel.digital.DigitalEntity <-- DigitalLocomotive
-    at.reder.railcom.datamodel.rail.Locomotive <-- DigitalLocomotive
+    at.reder.railcom.datamodel.digital.DigitalEntity <|-- DigitalLocomotive
+    at.reder.railcom.datamodel.rail.Locomotive <|-- DigitalLocomotive
 
     interface DigitalWagon {
     }
 
-    at.reder.railcom.datamodel.digital.DigitalEntity <-- DigitalWagon
-    at.reder.railcom.datamodel.rail.Wagon <-- DigitalWagon
+    at.reder.railcom.datamodel.digital.DigitalEntity <|-- DigitalWagon
+    at.reder.railcom.datamodel.rail.Wagon <|-- DigitalWagon
 
 }
 
