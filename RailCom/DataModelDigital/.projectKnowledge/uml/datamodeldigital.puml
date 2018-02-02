@@ -4,19 +4,15 @@
 
 namespace at.reder.railcom.datamodel.digital {
 
-    interface DigitalFunction {
-    }
-
     interface DigitalEntity {
         getDigitalId() : int
         setDigitalId(digitalId : int)
-        getDigitalFunctions() : Map<int, DigitalFunction>
-        setDigitalFunction(functionId : int, function : DigitalFunction)
+        getCVConfiguration() : Map<int, int>
+        setCVConfiguration(cv : int, value : int)
     }
 
     at.reder.railcom.datamodel.ModelEntity <|-- DigitalEntity
 
-    DigitalEntity *.. "*" DigitalFunction
 }
 
 namespace at.reder.railcom.datamodel.rail.digital {
