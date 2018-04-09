@@ -1,4 +1,8 @@
 @startuml
+
+hide empty fields
+hide empty members
+
 namespace at.reder.railcom.data.model {
 
     interface Entity {
@@ -12,7 +16,7 @@ namespace at.reder.railcom.data.model {
         +getScale() : Scale
         +setScale(scale : Scale)
     }
-    
+
     Entity <|-- ModelEntity
 
     enum Scale {
@@ -39,13 +43,14 @@ namespace at.reder.railcom.data.model {
         at.reder.railcom.data.model.Entity <|.. AbstractEntity
 
         abstract AbstractModelEntity {
+            #AbstractModelEntity(entity : Entity)
             #scale : Scale
             +getScale() : Scale
             +setScale(scale : Scale)
         }
 
         at.reder.railcom.data.model.ModelEntity <|.. AbstractModelEntity
-        AbstractEntity <|-- AbstractModelEntity
+
     }
 }
 
@@ -59,8 +64,12 @@ namespace at.reder.railcom.data.model.rail {
         +getMass() : int
         +setMass(mass : int)
     }
+    note left
+        Spurweite in mm
+        Masse in t
+    end note
 
-    at.reder.railcom.data.model.Entity <-- RailwayEntity
+    at.reder.railcom.data.model.Entity <|-- RailwayEntity
 
     interface Locomotive {
         +getWheelArrangement() : String
@@ -68,52 +77,64 @@ namespace at.reder.railcom.data.model.rail {
         +getPower() : int
         +setPower(power : int)
     }
+    note right
+        Power in kw
+    end note
 
     RailwayEntity <|-- Locomotive
 
     interface SteamLocomotive {
-        +getCylinderCount(type : SteamCylinderType) : int
-        +setCylinderCount(type : SteamCylinderType, cylinderCount : int)
-        +getSteamFuelType() : SteamFuelType
-        +setSteamFuelType(steamFuelType : SteamFuelType)
-        +getFuelStorage() : int
-        +setFuelStorage(fuelStorage : int)
-        +getWaterStorage() : int
-        +setWaterStorage(waterStorage : int)
+        +getCylinderCount(type : CylinderType) : int
+        +setCylinderCount(type : CylinderType, cylinderCount : int)
+        +getFuelType() : FuelType
+        +setFuelType(steamFuelType : FuelType)
+        +getFuelCapacity() : int
+        +setFuelCapacity(fuelCapacity : int)
+        +getWaterCapacity() : int
+        +setWaterCapacity(waterCapacity : int)
     }
+    note right
+        Kohl/Öl-Vorrat in t
+        Wasser/Dampf in m³
+    end note
 
     Locomotive <|-- SteamLocomotive
 
-    enum SteamCylinderType {
+    enum CylinderType {
         SUPERHEATED_STEAM_CYLINDER
         WET_STEAM_CYLINDER
     }
 
-    enum SteamFuelType {
+    enum FuelType {
         WOOD
         COAL
         OIL
         STEAM
+        getUnit() : String
     }
 
-    SteamLocomotive o-- SteamCylinderType
-    SteamLocomotive o-- SteamFuelType
+    SteamLocomotive *-- CylinderType
+    SteamLocomotive *-- FuelType
 
     interface DieselLocomotive {
         +getCylinderCount() : int
         +setCylinderCount(cylinderCount : int)
         +getCylinderCapacity() : int
         +setCylinderCapacity(cylinderCapacity : int)
-        +getFuelStorage() : int
-        +setFuelStorage(fuelStorage : int)        
+        +getFuelCapacity() : int
+        +setFuelCapacity(fuelCapaicty : int)
     }
+    note left
+        Dieselvorrat in t
+        Hubraum in cm³
+    end note
 
     Locomotive <|-- DieselLocomotive
 
     interface ElectricLocomotive {
         +getElectricSystems() : Set<ElecticSystem>
         +addElectricSystem(electricSystem : ElectricSystem)
-        +removeElectricSystem(electricSystem : ElectricSystem)        
+        +removeElectricSystem(electricSystem : ElectricSystem)
     }
 
     Locomotive <|-- ElectricLocomotive
@@ -122,6 +143,10 @@ namespace at.reder.railcom.data.model.rail {
         +getVoltage() : int
         +getFrequency() : double
     }
+    note left
+        Volt in V
+        Frequenz in Hz
+    end note
 
     ElectricLocomotive "*" *-- "*" ElectricSystem
 
@@ -140,13 +165,10 @@ namespace at.reder.railcom.data.model.rail {
     Train "1" *-- "*" RailwayEntity
 
     namespace impl {
-        abstract AbstractModelRailwayEntity {
-            #scale : Scale
+        abstract AbstractRailwayEntity {
             #wheelTrack : int
             #railwayAgency : String
             #mass : int
-            +getScale() : Scale
-            +setScale(scale : Scale)
             +getWheelTrack() : int
             +setWheelTrack(wheelTrack : int)
             +getRailwayAgency() : String
@@ -155,17 +177,62 @@ namespace at.reder.railcom.data.model.rail {
             +setMass(mass : int)
         }
 
-        at.reder.railcom.data.model.rail.RailwayEntity <|.. AbstractModelRailwayEntity
-        at.reder.railcom.data.model.impl.AbstractModelEntity <|-- AbstractModelRailwayEntity
+        at.reder.railcom.data.model.rail.RailwayEntity <|.. AbstractRailwayEntity
 
-        abstract AbstractModelLocomotive {
+        abstract AbstractLocomotive {
+            #power : int
             #wheelArrangement : String
             +getWheelArrangement() : String
             +setWheelArrangement(wheelArrangement : String)
+            +getPower() : int
+            +setPower(power : int)
         }
 
-        at.reder.railcom.data.model.rail.Locomotive <|.. AbstractModelLocomotive
-        AbstractModelRailwayEntity <|-- AbstractModelLocomotive
+        class SteamLocomotiveImpl {
+            #cylinderCount : Map<CylinderType, int>
+            #fuelType : FuelType
+            #fuelCapacity : int
+            #waterCapacity : int
+            +SteamLocomotiveImpl()
+            +getCylinderCount(type : CylinderType) : int
+            +setCylinderCount(type : CylinderType, cylinderCount : int)
+            +getFuelType() : FuelType
+            +setFuelType(steamFuelType : FuelType)
+            +getFuelCapacity() : int
+            +setFuelCapacity(fuelCapacity : int)
+            +getWaterCapacity() : int
+            +setWaterCapacity(waterCapacity : int)
+        }
+
+        class ElectricLocomotiveImpl {
+            #electricSystems : Set<ElectricSystem>
+            +ElectricLocomotiveImpl()
+            +getElectricSystems() : Set<ElecticSystem>
+            +addElectricSystem(electricSystem : ElectricSystem)
+            +removeElectricSystem(electricSystem : ElectricSystem)
+        }
+
+        class DieselLocomotiveImpl {
+            #cylinderCount : int
+            #cylinderCapacity : int
+            #fuelCapacity : int
+            +DieselLocomotiveImpl()
+            +getCylinderCount() : int
+            +setCylinderCount(cylinderCount : int)
+            +getCylinderCapacity() : int
+            +setCylinderCapacity(cylinderCapacity : int)
+            +getFuelCapacity() : int
+            +setFuelCapacity(fuelCapaicty : int)
+        }
+
+        at.reder.railcom.data.model.rail.Locomotive <|.. AbstractLocomotive
+        AbstractRailwayEntity <|-- AbstractLocomotive
+        AbstractLocomotive <|-- SteamLocomotiveImpl
+        at.reder.railcom.data.model.rail.SteamLocomotive <|.. SteamLocomotiveImpl
+        AbstractLocomotive <|-- ElectricLocomotiveImpl
+        at.reder.railcom.data.model.rail.ElectricLocomotive <|.. ElectricLocomotiveImpl
+        AbstractLocomotive <|-- DieselLocomotiveImpl
+        at.reder.railcom.data.model.rail.DieselLocomotive <|.. DieselLocomotiveImpl
     }
 
 }
@@ -215,6 +282,6 @@ namespace at.reder.railcom.datamodel.persistence.jpa {
     class LocomotiveEntity {
     }
 
-    
+
 }
 @enduml
