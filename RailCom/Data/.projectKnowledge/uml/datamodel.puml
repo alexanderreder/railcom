@@ -1,0 +1,220 @@
+@startuml
+namespace at.reder.railcom.data.model {
+
+    interface Entity {
+        +getName() : String
+        +setName(name : String)
+        +getDescription() : String
+        +setDescription(description : String)
+    }
+
+    interface ModelEntity {
+        +getScale() : Scale
+        +setScale(scale : Scale)
+    }
+    
+    Entity <|-- ModelEntity
+
+    enum Scale {
+        Z
+        N
+        HO
+        O
+        I
+    }
+
+    ModelEntity o-- Scale
+
+    namespace impl {
+
+        abstract AbstractEntity {
+            #name : String
+            #description : String
+            +getName() : String
+            +setName(name : String)
+            +getDescription() : String
+            +setDescription(description : String)
+        }
+
+        at.reder.railcom.data.model.Entity <|.. AbstractEntity
+
+        abstract AbstractModelEntity {
+            #scale : Scale
+            +getScale() : Scale
+            +setScale(scale : Scale)
+        }
+
+        at.reder.railcom.data.model.ModelEntity <|.. AbstractModelEntity
+        AbstractEntity <|-- AbstractModelEntity
+    }
+}
+
+namespace at.reder.railcom.data.model.rail {
+
+    interface RailwayEntity {
+        +getWheelTrack() : int
+        +setWheelTrack(wheelTrack : int)
+        +getRailwayAgency() : String
+        +setRailwayAgency(railwayAgency : String)
+        +getMass() : int
+        +setMass(mass : int)
+    }
+
+    at.reder.railcom.data.model.Entity <-- RailwayEntity
+
+    interface Locomotive {
+        +getWheelArrangement() : String
+        +setWheelArrangement(wheelArrangement : String)
+        +getPower() : int
+        +setPower(power : int)
+    }
+
+    RailwayEntity <|-- Locomotive
+
+    interface SteamLocomotive {
+        +getCylinderCount(type : SteamCylinderType) : int
+        +setCylinderCount(type : SteamCylinderType, cylinderCount : int)
+        +getSteamFuelType() : SteamFuelType
+        +setSteamFuelType(steamFuelType : SteamFuelType)
+        +getFuelStorage() : int
+        +setFuelStorage(fuelStorage : int)
+        +getWaterStorage() : int
+        +setWaterStorage(waterStorage : int)
+    }
+
+    Locomotive <|-- SteamLocomotive
+
+    enum SteamCylinderType {
+        SUPERHEATED_STEAM_CYLINDER
+        WET_STEAM_CYLINDER
+    }
+
+    enum SteamFuelType {
+        WOOD
+        COAL
+        OIL
+        STEAM
+    }
+
+    SteamLocomotive o-- SteamCylinderType
+    SteamLocomotive o-- SteamFuelType
+
+    interface DieselLocomotive {
+        +getCylinderCount() : int
+        +setCylinderCount(cylinderCount : int)
+        +getCylinderCapacity() : int
+        +setCylinderCapacity(cylinderCapacity : int)
+        +getFuelStorage() : int
+        +setFuelStorage(fuelStorage : int)        
+    }
+
+    Locomotive <|-- DieselLocomotive
+
+    interface ElectricLocomotive {
+        +getElectricSystems() : Set<ElecticSystem>
+        +addElectricSystem(electricSystem : ElectricSystem)
+        +removeElectricSystem(electricSystem : ElectricSystem)        
+    }
+
+    Locomotive <|-- ElectricLocomotive
+
+    interface ElectricSystem {
+        +getVoltage() : int
+        +getFrequency() : double
+    }
+
+    ElectricLocomotive "*" *-- "*" ElectricSystem
+
+    interface Wagon {
+        +getAxisCount() : int
+        +setAxisCount(axisCount : int)
+    }
+
+    RailwayEntity <|-- Wagon
+
+    interface Train {
+        +getTrain() : List<RailwayEntity>
+        +addEntity(pos : int, entity : RailwayEntity)
+    }
+
+    Train "1" *-- "*" RailwayEntity
+
+    namespace impl {
+        abstract AbstractModelRailwayEntity {
+            #scale : Scale
+            #wheelTrack : int
+            #railwayAgency : String
+            #mass : int
+            +getScale() : Scale
+            +setScale(scale : Scale)
+            +getWheelTrack() : int
+            +setWheelTrack(wheelTrack : int)
+            +getRailwayAgency() : String
+            +setRailwayAgency(railwayAgency : String)
+            +getMass() : int
+            +setMass(mass : int)
+        }
+
+        at.reder.railcom.data.model.rail.RailwayEntity <|.. AbstractModelRailwayEntity
+        at.reder.railcom.data.model.impl.AbstractModelEntity <|-- AbstractModelRailwayEntity
+
+        abstract AbstractModelLocomotive {
+            #wheelArrangement : String
+            +getWheelArrangement() : String
+            +setWheelArrangement(wheelArrangement : String)
+        }
+
+        at.reder.railcom.data.model.rail.Locomotive <|.. AbstractModelLocomotive
+        AbstractModelRailwayEntity <|-- AbstractModelLocomotive
+    }
+
+}
+
+namespace at.reder.railcom.data.model.track {
+
+    interface Signal {
+    }
+
+    at.reder.railcom.datamodel.Entity <|-- Signal
+
+    interface Turnout {
+    }
+
+    at.reder.railcom.datamodel.Entity <|-- Turnout
+
+    interface Platform {
+    }
+
+    at.reder.railcom.datamodel.Entity <|-- Platform
+
+    interface BlockPost {
+    }
+
+    at.reder.railcom.datamodel.Entity <|-- BlockPost
+}
+
+namespace at.reder.railcom.datamodel.street {
+
+    interface StreetEntity {
+    }
+
+    at.reder.railcom.datamodel.Entity <|-- StreetEntity
+
+}
+
+namespace at.reder.railcom.datamodel.building {
+
+    interface HouseEntity {
+    }
+
+    at.reder.railcom.datamodel.Entity <|-- HouseEntity
+}
+
+namespace at.reder.railcom.datamodel.persistence.jpa {
+
+    class LocomotiveEntity {
+    }
+
+    
+}
+@enduml
