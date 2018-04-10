@@ -30,9 +30,6 @@ namespace at.reder.railcom.data.model {
 
     interface ClassDesignation {
         +getName() : String
-        +getMajorNr() : int
-        +getMinorNr() : int
-        +getCntrlNr() : int
         +getRailwayAgency() : RailwayAgency
         +setRailwayAgency(railwayAgency : RailwayAgency)
         +getDateFrom() : Date
@@ -74,24 +71,38 @@ namespace at.reder.railcom.data.model {
 
         at.reder.railcom.data.model.ModelEntity <|.. AbstractModelEntity
 
-        class ClassDesignationImpl {
-            -majorNr : int
-            -minorNr : int
-            -cntrlNr : int
-            -railwayAgency : RailwayAgency
-            -dateFrom : Date
-            -dateTo : Date
-            +ClassDesignationImpl(majorNr : int, minorNr : int, cntrlNr : int, dateFrom : Date)
-            +getName() : String
-            +getMajorNr() : int
-            +getMinorNr() : int
-            +getCntrlNr() : int
+        abstract class AbstractClassDesignation {
+            #railwayAgency : RailwayAgency
+            #dateFrom : Date
+            #dateTo : Date
+            #AbstractClassDesignation(dateFrom : Date)
             +getRailwayAgency() : RailwayAgency
             +setRailwayAgency(railwayAgency : RailwayAgency)
             +getDateFrom() : Date
             +getDateTo() : Date
             +setDateTo(dateTo : Date)
         }
+
+        class ModernClassDesignation {
+            -majorNr : int
+            -minorNr : int
+            -cntrlNr : int
+            +ClassDesignationImpl(majorNr : int, minorNr : int, cntrlNr : int, dateFrom : Date)
+            +getName() : String
+            +getMajorNr() : int
+            +getMinorNr() : int
+            +getCntrlNr() : int
+        }
+
+        class TextClassDesignation {
+            -name : String
+            +TextClassDesignation(name : String, dateFrom : Date)
+            +getName() : String
+        }
+
+        ClassDesignation <|.. AbstractClassDesignation
+        AbstractClassDesignation <|-- ModernClassDesignation
+        AbstractClassDesignation <|-- TextClassDesignation
 
         at.reder.railcom.data.model.ClassDesignation <|.. ClassDesignationImpl
 

@@ -10,12 +10,6 @@ public interface ClassDesignation {
 
     public String getName();
 
-    public int getMajorNr();
-
-    public int getMinorNr();
-
-    public int getCntrlNr();
-
     public RailwayAgency getRailwayAgency();
 
     public void setRailwayAgency(RailwayAgency railwayAgency);
