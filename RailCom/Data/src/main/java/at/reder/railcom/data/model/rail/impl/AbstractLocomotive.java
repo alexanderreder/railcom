@@ -6,7 +6,7 @@ import at.reder.railcom.data.model.rail.Locomotive;
  *
  * @author alex
  */
-public class AbstractLocomotive extends AbstractRailwayEntity implements Locomotive {
+public abstract class AbstractLocomotive extends AbstractRailwayEntity implements Locomotive {
 
     protected int power;
     protected String wheelArrangement;

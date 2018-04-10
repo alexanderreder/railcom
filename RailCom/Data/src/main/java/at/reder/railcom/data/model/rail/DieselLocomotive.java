@@ -14,8 +14,8 @@ public interface DieselLocomotive extends Locomotive {
 
     public void setCylinderCapacity(int cylinderCapacity);
 
-    public int getFuelStorage();
+    public int getFuelCapacity();
 
-    public void setFuelStorage(int fuelStorage);
+    public void setFuelCapacity(int fuelCapacity);
 
 }

@@ -19,6 +19,29 @@ namespace at.reder.railcom.data.model {
 
     Entity <|-- ModelEntity
 
+
+    interface RailwayAgency {
+        +getName() : String
+        +getNationality() : String
+        +getDateFrom() : Date
+        +getDateTo() : Date
+        +setDateTo(dataTo : Date)
+    }
+
+    interface ClassDesignation {
+        +getName() : String
+        +getMajorNr() : int
+        +getMinorNr() : int
+        +getCntrlNr() : int
+        +getRailwayAgency() : RailwayAgency
+        +setRailwayAgency(railwayAgency : RailwayAgency)
+        +getDateFrom() : Date
+        +getDateTo() : Date
+        +setDateTo(dateTo : Date)
+    }
+
+    ClassDesignation o-- "1" RailwayAgency
+
     enum Scale {
         Z
         N
@@ -51,16 +74,55 @@ namespace at.reder.railcom.data.model {
 
         at.reder.railcom.data.model.ModelEntity <|.. AbstractModelEntity
 
+        class ClassDesignationImpl {
+            -majorNr : int
+            -minorNr : int
+            -cntrlNr : int
+            -railwayAgency : RailwayAgency
+            -dateFrom : Date
+            -dateTo : Date
+            +ClassDesignationImpl(majorNr : int, minorNr : int, cntrlNr : int, dateFrom : Date)
+            +getName() : String
+            +getMajorNr() : int
+            +getMinorNr() : int
+            +getCntrlNr() : int
+            +getRailwayAgency() : RailwayAgency
+            +setRailwayAgency(railwayAgency : RailwayAgency)
+            +getDateFrom() : Date
+            +getDateTo() : Date
+            +setDateTo(dateTo : Date)
+        }
+
+        at.reder.railcom.data.model.ClassDesignation <|.. ClassDesignationImpl
+
+        class RailwayAgencyImpl {
+            -name : String
+            -nationality : String
+            -dateFrom : Date
+            -dateTo : Date
+            +RailwayAgencyImpl(name : String, nationality : String, dateFrom : Date)
+            +getName() : String
+            +getNationality() : String
+            +getDateFrom() : Date
+            +getDateTo() : Date
+            +setDateTo(dataTo : Date)
+        }
+
+        at.reder.railcom.data.model.RailwayAgency <|.. RailwayAgencyImpl
+
     }
 }
 
 namespace at.reder.railcom.data.model.rail {
 
     interface RailwayEntity {
+        +getDeliveryClassDesignation() : ClassDesignation
+        +setDeliveryClassDesignation(deliveryClassDesignation : ClassDesignation)
+        +getAdditionalClasseDesignations() : Set<ClassDesignation>
+        +addAdditionalClassDesignation(classDesignation : ClassDesignation)
+        +removeAddtionalClassDesignation(classDesignation : ClassDesignation)
         +getWheelTrack() : int
         +setWheelTrack(wheelTrack : int)
-        +getRailwayAgency() : String
-        +setRailwayAgency(railwayAgency : String)
         +getMass() : int
         +setMass(mass : int)
     }
@@ -70,6 +132,7 @@ namespace at.reder.railcom.data.model.rail {
     end note
 
     at.reder.railcom.data.model.Entity <|-- RailwayEntity
+    at.reder.railcom.data.model.ClassDesignation "1..*" --o RailwayEntity
 
     interface Locomotive {
         +getWheelArrangement() : String
@@ -166,13 +229,17 @@ namespace at.reder.railcom.data.model.rail {
 
     namespace impl {
         abstract AbstractRailwayEntity {
+            #deliveryClassDesignation : ClassDesignation
+            #additionalClasseDesignations : Set<ClassDesignation>
             #wheelTrack : int
-            #railwayAgency : String
             #mass : int
+            +getDeliveryClassDesignation() : ClassDesignation
+            +setDeliveryClassDesignation(deliveryClassDesignation : ClassDesignation)
+            +getAdditionalClasseDesignations() : Set<ClassDesignation>
+            +addAdditionalClassDesignation(classDesignation : ClassDesignation)
+            +removeAddtionalClassDesignation(classDesignation : ClassDesignation)
             +getWheelTrack() : int
             +setWheelTrack(wheelTrack : int)
-            +getRailwayAgency() : String
-            +setRailwayAgency(railwayAgency : String)
             +getMass() : int
             +setMass(mass : int)
         }

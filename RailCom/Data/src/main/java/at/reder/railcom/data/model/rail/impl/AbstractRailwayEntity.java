@@ -1,7 +1,11 @@
 package at.reder.railcom.data.model.rail.impl;
 
+import at.reder.railcom.data.model.ClassDesignation;
 import at.reder.railcom.data.model.impl.AbstractEntity;
 import at.reder.railcom.data.model.rail.RailwayEntity;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -9,12 +13,39 @@ import at.reder.railcom.data.model.rail.RailwayEntity;
  */
 public abstract class AbstractRailwayEntity extends AbstractEntity implements RailwayEntity {
 
+    protected ClassDesignation deliveryClassDesignation;
+    protected final Set<ClassDesignation> additionalClassDesignations;
     protected int wheelTrack;
-    protected String railwayAgency;
     protected int mass;
 
     protected AbstractRailwayEntity() {
         super();
+        this.additionalClassDesignations = new HashSet<>();
+    }
+
+    @Override
+    public ClassDesignation getDeliveryClassDesignation() {
+        return this.deliveryClassDesignation;
+    }
+
+    @Override
+    public void setDeliveryClassDesignation(ClassDesignation deliveryClassDesignation) {
+        this.deliveryClassDesignation = deliveryClassDesignation;
+    }
+
+    @Override
+    public Set<ClassDesignation> getAdditionalClassDesignations() {
+        return Collections.unmodifiableSet(this.additionalClassDesignations);
+    }
+
+    @Override
+    public void addAdditionalClassDesignation(ClassDesignation additionalClassDesignation) {
+        this.additionalClassDesignations.add(additionalClassDesignation);
+    }
+
+    @Override
+    public void removeAdditionalClassDesignation(ClassDesignation additionalClassDesignation) {
+        this.additionalClassDesignations.remove(additionalClassDesignation);
     }
 
     /**
@@ -31,22 +62,6 @@ public abstract class AbstractRailwayEntity extends AbstractEntity implements Ra
     @Override
     public void setWheelTrack(int wheelTrack) {
         this.wheelTrack = wheelTrack;
-    }
-
-    /**
-     * @return the railwayAgency
-     */
-    @Override
-    public String getRailwayAgency() {
-        return railwayAgency;
-    }
-
-    /**
-     * @param railwayAgency the railwayAgency to set
-     */
-    @Override
-    public void setRailwayAgency(String railwayAgency) {
-        this.railwayAgency = railwayAgency;
     }
 
     /**
